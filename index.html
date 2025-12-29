@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Maths Quiz & Spelling Bee Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+        text-align: center;
+    }
+
+    h1 { color: #333; }
+
+    .container {
+        max-width: 500px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input, button {
+        padding: 10px;
+        width: 80%;
+        margin: 10px 0;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    button {
+        background: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #0056b3;
+    }
+
+    .game-section { display: none; }
+    .visible { display: block; }
+
+    .menu-btn {
+        width: 200px;
+        margin: 5px;
+        background: #28a745;
+    }
+    .menu-btn:hover {
+        background: #1e7e34;
+    }
+
+</style>
+</head>
+<body>
+
+<h1>🎮 Maths Quiz & Spelling Bee Game</h1>
+
+<div class="container">
+
+    <!-- MENU -->
+    <div id="menu">
+        <button class="menu-btn" onclick="showGame('mathGame')">Maths Quiz Game</button>
+        <button class="menu-btn" onclick="showGame('spellGame')">Spelling Bee Game</button>
+    </div>
+
+    <!-- MATHS GAME -->
+    <div id="mathGame" class="game-section">
+        <h2>🧮 Maths Quiz</h2>
+        <p id="mathQuestion"></p>
+        <input type="number" id="mathAnswer" placeholder="Enter your answer">
+        <button onclick="checkMathAnswer()">Submit</button>
+        <p id="mathResult"></p>
+        <button onclick="startMathGame()">Next Question</button><br><br>
+        <button onclick="goHome()">Back</button>
+    </div>
+
+    <!-- SPELLING BEE -->
+    <div id="spellGame" class="game-section">
+        <h2>🐝 Spelling Bee</h2>
+        <p><strong>Spell this word:</strong></p>
+        <h3 id="spellWord"></h3>
+        <input type="text" id="spellInput" placeholder="Type the spelling">
+        <button onclick="checkSpelling()">Submit</button>
+        <p id="spellResult"></p>
+        <button onclick="startSpelling()">Next Word</button><br><br>
+        <button onclick="goHome()">Back</button>
+    </div>
+
+</div>
+
+<script>
+// SHOW GAME SECTIONS
+function showGame(gameId) {
+    document.getElementById("menu").style.display = "none";
+    document.querySelectorAll(".game-section").forEach(sec => sec.style.display = "none");
+    document.getElementById(gameId).style.display = "block";
+
+    if (gameId === "mathGame") startMathGame();
+    if (gameId === "spellGame") startSpelling();
+}
+
+function goHome() {
+    document.getElementById("menu").style.display = "block";
+    document.querySelectorAll(".game-section").forEach(sec => sec.style.display = "none");
+}
+
+/* ------------------------
+      MATHS QUIZ GAME
+------------------------ */
+let correctMathAnswer = 0;
+
+function startMathGame() {
+    let num1 = Math.floor(Math.random() * 20) + 1;
+    let num2 = Math.floor(Math.random() * 20) + 1;
+    let operators = ["+", "-", "*"];
+    let op = operators[Math.floor(Math.random() * operators.length)];
+
+    correctMathAnswer = eval(`${num1} ${op} ${num2}`);
+
+    document.getElementById("mathQuestion").innerText = `${num1} ${op} ${num2} = ?`;
+    document.getElementById("mathAnswer").value = "";
+    document.getElementById("mathResult").innerText = "";
+}
+
+function checkMathAnswer() {
+    let userAns = Number(document.getElementById("mathAnswer").value);
+    if (userAns === correctMathAnswer) {
+        document.getElementById("mathResult").innerHTML = "✅ Correct!";
+    } else {
+        document.getElementById("mathResult").innerHTML = "❌ Wrong! Correct answer is " + correctMathAnswer;
+    }
+}
+
+/* ------------------------
+      SPELLING BEE GAME
+------------------------ */
+let words = ["beautiful", "elephant", "science", "computer", "fantastic", "education", "success", "banana", "village", "Nigeria"];
+
+let currentWord = "";
+
+function startSpelling() {
+    currentWord = words[Math.floor(Math.random() * words.length)];
+    document.getElementById("spellWord").innerText = currentWord.split("").sort(() => 0.5 - Math.random()).join("");
+    document.getElementById("spellInput").value = "";
+    document.getElementById("spellResult").innerText = "";
+}
+
+function checkSpelling() {
+    let userWord = document.getElementById("spellInput").value.toLowerCase();
+    if (userWord === currentWord.toLowerCase()) {
+        document.getElementById("spellResult").innerHTML = "✅ Correct!";
+    } else {
+        document.getElementById("spellResult").innerHTML = "❌ Wrong! Correct spelling is: " + currentWord;
+    }
+}
+
+</script>
+
+</body>
+</html>
